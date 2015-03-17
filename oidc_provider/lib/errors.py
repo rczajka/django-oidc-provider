@@ -1,4 +1,7 @@
-import urllib
+try:
+    from urllib.parse import quote
+except ImportError: # Python 2
+    from urllib import quote
 
 
 class RedirectUriError(Exception):
@@ -64,7 +67,7 @@ class AuthorizeError(Exception):
 
     def create_uri(self, redirect_uri, state):
 
-        description = urllib.quote(self.description)
+        description = quote(self.description)
 
         # See: http://openid.net/specs/openid-connect-core-1_0.html#ImplicitAuthError
         hash_or_question = '#' if self.grant_type == 'implicit' else '?'

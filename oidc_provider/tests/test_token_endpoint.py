@@ -1,6 +1,9 @@
 import json
-from urllib import urlencode
 import uuid
+try:
+    from urllib.parse import urlencode
+except ImportError: # Python 2
+    from urllib import urlencode
 
 from django.test import RequestFactory
 from django.test import TestCase
@@ -97,7 +100,7 @@ class TokenTestCase(TestCase):
             'state': self.state,
         }
         response = self._post_request(post_data)
-        response_dic = json.loads(response.content)
+        response_dic = json.loads(response.content.decode('ascii'))
 
         self.assertEqual('access_token' in response_dic, True,
                 msg='"access_token" key is missing in response.')
@@ -113,7 +116,7 @@ class TokenTestCase(TestCase):
         invalid_data['code'] = code.code
 
         response = self._post_request(invalid_data)
-        response_dic = json.loads(response.content)
+        response_dic = json.loads(response.content.decode('ascii'))
 
         self.assertEqual('error' in response_dic, True,
                 msg='"error" key should exists in response.')

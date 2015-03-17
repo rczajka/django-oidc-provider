@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.models import User
 from oidc_provider.models import *
 
@@ -11,6 +12,7 @@ def create_fake_user():
 	user = User()
 	user.username = 'johndoe'
 	user.email = 'johndoe@example.com'
+	user.last_login = datetime.now()
 	user.set_password('1234')
 
 	user.save()
